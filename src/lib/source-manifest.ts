@@ -6,24 +6,28 @@
  * when the user actually triggers a push.
  */
 
-const PATTERNS = [
-  // project root files
-  "../../package.json",
-  "../../index.html",
-  "../../vite.config.ts",
-  "../../tsconfig.json",
-  "../../tsconfig.app.json",
-  "../../tsconfig.node.json",
-  "../../components.json",
-  "../../integrations.md",
-  "../../README.md",
-  // public assets
-  "../../public/manifest.webmanifest",
-  // everything under src (source of truth for the app)
-  "../**/*.{ts,tsx,css,json}",
-];
-
-const lazy = import.meta.glob(PATTERNS, { query: "?raw", import: "default" });
+// NOTE: import.meta.glob only accepts inline string literals — the patterns
+// must stay inline here (Vite rejects variable references with
+// "Invalid glob import syntax: Could only use literals").
+const lazy = import.meta.glob(
+  [
+    // project root files
+    "../../package.json",
+    "../../index.html",
+    "../../vite.config.ts",
+    "../../tsconfig.json",
+    "../../tsconfig.app.json",
+    "../../tsconfig.node.json",
+    "../../components.json",
+    "../../integrations.md",
+    "../../README.md",
+    // public assets
+    "../../public/manifest.webmanifest",
+    // everything under src (source of truth for the app)
+    "../**/*.{ts,tsx,css,json}",
+  ],
+  { query: "?raw", import: "default" },
+);
 
 /** Paths that should never be uploaded (secrets / generated / vendor). */
 function isExcluded(clean: string): boolean {
