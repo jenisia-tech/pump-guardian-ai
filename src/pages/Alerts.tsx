@@ -1,19 +1,67 @@
 import { motion } from "framer-motion";
-import { BellRing, CheckCheck, Download, Search } from "lucide-react";
+import { BellRing, CheckCheck, Download, Github as GithubIcon, Search } from "lucide-react";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { PageHeader } from "@/components/PageHeader";
 import { SeverityBadge } from "@/components/SeverityBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useGithubActions } from "@/hooks/use-github";
 import { dateTimeStr } from "@/lib/format";
+import { convexEnabled, readGithubSettings } from "@/lib/github-config";
+import { alertIssueBody, alertIssueTitle } from "@/lib/github-issues";
 import { buildPdf, downloadPdf } from "@/lib/pdf";
 import {
   simulation,
   useAlerts,
+  type Alert,
   type Severity,
 } from "@/lib/simulation";
 import { cn } from "@/lib/utils";
+
+function FileIssueButton({ alert }: { alert: Alert }) {
+  const { createIssue } = useGithubActions();
+  const [busy, setBusy] = useState(false);
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      className="ml-auto h-6 gap-1 px-2 text-[11px]"
+      disabled={busy}
+      onClick={async () => {
+        const cfg = readGithubSettings();
+        if (!cfg.owner.trim() || !cfg.repo.trim()) {
+          toast.error("Set the GitHub repository in Settings first");
+          return;
+        }
+        setBusy(true);
+        try {
+          const res = await createIssue({
+            owner: cfg.owner.trim(),
+            repo: cfg.repo.trim(),
+            title: alertIssueTitle(alert),
+            body: alertIssueBody(alert),
+          });
+          toast.success(`Issue #${res.number} filed`, { description: res.url });
+        } catch (e) {
+          toast.error("Could not file issue", {
+            description: e instanceof Error ? e.message : String(e),
+          });
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      {busy ? (
+        <span className="size-3 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
+      ) : (
+        <GithubIcon className="size-3" />
+      )}
+      Issue
+    </Button>
+  );
+}
 
 const FILTERS: Array<{ id: Severity | "all"; label: string }> = [
   { id: "all", label: "All" },
@@ -159,7 +207,12 @@ export default function Alerts() {
                     <span className="font-semibold text-primary">Recommended:</span> {a.recommendation}
                   </p>
                 )}
-                <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">{a.source}</p>
+                <div className="mt-2 flex items-center gap-2">
+                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{a.source}</p>
+                  {convexEnabled && (a.severity === "critical" || a.severity === "warning") && (
+                    <FileIssueButton alert={a} />
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}

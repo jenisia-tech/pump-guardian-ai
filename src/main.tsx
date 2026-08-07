@@ -1,9 +1,11 @@
 import "@vly-ai/integrations";
 import { AnimatePresence, motion } from "framer-motion";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { RequireAuth } from "@/components/RequireAuth";
 import { BrandMark } from "@/components/BrandMark";
+import { convexUrl } from "@/lib/github-config";
 import { VlyToolbar } from "../vly-toolbar-readonly.tsx";
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -138,6 +140,14 @@ class ToolbarErrorBoundary extends React.Component<
   }
 }
 
+/** Mounts the Convex client when a deployment URL is configured. */
+const convex = convexUrl ? new ConvexReactClient(convexUrl) : null;
+
+function AppProviders({ children }: { children: React.ReactNode }) {
+  if (!convex) return <>{children}</>;
+  return <ConvexProvider client={convex}>{children}</ConvexProvider>;
+}
+
 /** Hard guard so runtime errors never leave the preview as a blank page. */
 class RootErrorBoundary extends React.Component<
   { children: React.ReactNode },
@@ -179,44 +189,46 @@ class RootErrorBoundary extends React.Component<
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RootErrorBoundary>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
-        <BootSplash />
-        <ToolbarErrorBoundary>
-          <VlyToolbar />
-        </ToolbarErrorBoundary>
-        <BrowserRouter>
-          <RouteSyncer />
-          <Suspense fallback={<RouteLoading />}>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/auth" element={<AuthPage redirectAfterAuth="/dashboard" />} />
-              <Route
-                element={
-                  <RequireAuth>
-                    <AppShell />
-                  </RequireAuth>
-                }
-              >
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/live" element={<LiveMonitoring />} />
-                <Route path="/digital-twin" element={<DigitalTwin />} />
-                <Route path="/simulation" element={<Simulation />} />
-                <Route path="/diagnostics" element={<Diagnostics />} />
-                <Route path="/catalog" element={<Catalog />} />
-                <Route path="/alerts" element={<Alerts />} />
-                <Route path="/maintenance" element={<Maintenance />} />
-                <Route path="/history" element={<History />} />
-                <Route path="/architecture" element={<Architecture />} />
-                <Route path="/cost" element={<CostAnalysis />} />
-                <Route path="/docs" element={<Docs />} />
-                <Route path="/settings" element={<Settings />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-        <Toaster position="top-right" richColors closeButton />
-      </ThemeProvider>
+      <AppProviders>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+          <BootSplash />
+          <ToolbarErrorBoundary>
+            <VlyToolbar />
+          </ToolbarErrorBoundary>
+          <BrowserRouter>
+            <RouteSyncer />
+            <Suspense fallback={<RouteLoading />}>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/auth" element={<AuthPage redirectAfterAuth="/dashboard" />} />
+                <Route
+                  element={
+                    <RequireAuth>
+                      <AppShell />
+                    </RequireAuth>
+                  }
+                >
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/live" element={<LiveMonitoring />} />
+                  <Route path="/digital-twin" element={<DigitalTwin />} />
+                  <Route path="/simulation" element={<Simulation />} />
+                  <Route path="/diagnostics" element={<Diagnostics />} />
+                  <Route path="/catalog" element={<Catalog />} />
+                  <Route path="/alerts" element={<Alerts />} />
+                  <Route path="/maintenance" element={<Maintenance />} />
+                  <Route path="/history" element={<History />} />
+                  <Route path="/architecture" element={<Architecture />} />
+                  <Route path="/cost" element={<CostAnalysis />} />
+                  <Route path="/docs" element={<Docs />} />
+                  <Route path="/settings" element={<Settings />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+          <Toaster position="top-right" richColors closeButton />
+        </ThemeProvider>
+      </AppProviders>
     </RootErrorBoundary>
   </React.StrictMode>,
 );

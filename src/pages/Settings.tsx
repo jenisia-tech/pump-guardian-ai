@@ -13,6 +13,7 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/PageHeader";
+import GithubCard from "@/components/GithubCard";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
@@ -219,6 +220,9 @@ export default function Settings() {
             </Button>
           </div>
         </motion.div>
+
+        {/* GitHub integration */}
+        <GithubCard />
 
         {/* danger zone */}
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.35 }} className="rounded-xl border border-red-500/25 bg-red-500/5 p-5 lg:col-span-2">

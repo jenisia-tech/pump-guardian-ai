@@ -42,7 +42,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { convexEnabled } from "@/lib/github-config";
 import { simulation, useAlerts, useSimulation, MODE_LABEL } from "@/lib/simulation";
+import GithubAutoFile from "./GithubAutoFile";
 import { relativeTime } from "@/lib/format";
 import { Wordmark } from "./BrandMark";
 import { SeverityBadge } from "./SeverityBadge";
@@ -607,6 +609,7 @@ export function AppShell() {
 
       {/* main column */}
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
+        {convexEnabled && <GithubAutoFile />}
         <TopBar onMenu={() => setMobileOpen(true)} onShortcuts={() => setShortcutsOpen(true)} />
 
         {s.mode === "shutdown" && (
