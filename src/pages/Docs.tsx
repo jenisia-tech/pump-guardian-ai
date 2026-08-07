@@ -45,7 +45,7 @@ export default function Docs() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Documentation"
-        description="Engineering documentation for the PumpGuardian AI platform — design, thresholds, pilot plan, and known limitations."
+        description="Engineering documentation for the CentriGuard platform — design, thresholds, pilot plan, and known limitations."
         actions={
           <div className="relative w-full sm:w-72">
             <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />

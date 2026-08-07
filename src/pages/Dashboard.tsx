@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   ArrowUpRight,
   BatteryCharging,
+  Boxes,
   Gauge as GaugeIcon,
   HeartPulse,
   Hourglass,
@@ -25,6 +26,7 @@ import { Sparkline } from "@/components/Sparkline";
 import { Button } from "@/components/ui/button";
 import { C } from "@/lib/colors";
 import { fmt, relativeTime } from "@/lib/format";
+import { useFleet } from "@/lib/fleet";
 import {
   useAlerts,
   useHistory,
@@ -106,6 +108,7 @@ export default function Dashboard() {
   const s = useSimulation();
   const alerts = useAlerts();
   const history = useHistory(60);
+  const fleet = useFleet();
 
   const vibData = history.map((h) => ({ t: h.t, v: h.rms }));
   const tempData = history.map((h) => ({ t: h.t, v: h.temp }));
@@ -129,8 +132,8 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Asset Overview"
-        description="CHW-02 · 30 HP centrifugal pump · chilled water loop · live simulated telemetry"
+        title="Fleet Overview"
+        description="Your monitored pumps · CHW-02 30 HP chilled-water unit showing live simulated telemetry"
         actions={
           <Link to="/simulation">
             <Button variant="outline" size="sm">
@@ -139,6 +142,43 @@ export default function Dashboard() {
           </Link>
         }
       />
+
+      {/* my fleet strip */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.04, duration: 0.35 }}
+        className="glass flex flex-wrap items-center gap-3 rounded-xl px-4 py-3"
+      >
+        <div className="flex size-9 items-center justify-center rounded-lg border border-primary/20 bg-primary/8 text-primary">
+          <Boxes className="size-4.5" />
+        </div>
+        <div className="mr-1">
+          <p className="text-[13px] font-semibold text-foreground">My fleet</p>
+          <p className="text-[11px] text-muted-foreground">{fleet.length} monitored unit{fleet.length === 1 ? "" : "s"}</p>
+        </div>
+        <div className="flex flex-1 flex-wrap items-center gap-2">
+          {fleet.map((p) => (
+            <Link
+              key={p.id}
+              to={p.active ? "/digital-twin" : "/catalog"}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-medium transition-all duration-200",
+                p.active
+                  ? "border-green-500/30 bg-green-500/8 text-green-500 hover:border-green-500/60"
+                  : "border-border/60 text-muted-foreground hover:border-white/25 hover:text-foreground",
+              )}
+            >
+              {p.active && <span className="size-1.5 animate-pulse rounded-full bg-green-500" />}
+              <span className="numeric">{p.model}</span>
+              <span className="hidden sm:inline">· {p.hp} HP</span>
+            </Link>
+          ))}
+        </div>
+        <Link to="/catalog" className="text-[12px] font-medium text-primary hover:underline">
+          Browse catalog
+        </Link>
+      </motion.div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">

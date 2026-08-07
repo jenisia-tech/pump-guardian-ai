@@ -1,8 +1,9 @@
 import { useSyncExternalStore } from "react";
 
 /* ------------------------------------------------------------------ */
-/* Client-side demo session (no backend).                              */
+/* Client-side demo auth (no backend).                                 */
 /* Demo credentials: admin / admin123                                  */
+/* Accounts created via the sign-up form are stored locally.           */
 /* ------------------------------------------------------------------ */
 
 export interface SessionUser {
@@ -12,10 +13,18 @@ export interface SessionUser {
   initials: string;
 }
 
-const LS_KEY = "pg.session";
-const SESSION_KEY = "pg.session.tmp";
+const LS_KEY = "centriguard.session";
+const SESSION_KEY = "centriguard.session.tmp";
+const USERS_KEY = "centriguard.users";
 const VALID_USERNAME = "admin";
 const VALID_PASSWORD = "admin123";
+
+interface StoredUser {
+  name: string;
+  email: string;
+  password: string;
+  createdAt: number;
+}
 
 interface Session {
   user: SessionUser;
@@ -26,9 +35,26 @@ interface Session {
 const DEMO_USER: SessionUser = {
   name: "Admin",
   role: "System Operator",
-  email: "admin@pumpguardian.ai",
+  email: "admin@centriguard.io",
   initials: "AD",
 };
+
+function initialsOf(name: string) {
+  const parts = name.trim().split(/\s+/);
+  const first = parts[0]?.[0] ?? "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] ?? "" : "";
+  return (first + last).toUpperCase() || "CG";
+}
+
+function readUsers(): StoredUser[] {
+  try {
+    const raw = localStorage.getItem(USERS_KEY);
+    if (raw) return JSON.parse(raw) as StoredUser[];
+  } catch {
+    /* noop */
+  }
+  return [];
+}
 
 function readSession(): Session | null {
   try {
@@ -74,23 +100,84 @@ function persist(s: Session) {
   }
 }
 
-/** Validates demo credentials and signs the user in. */
-export async function signIn(
-  username: string,
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Creates an account locally and signs the customer in. */
+export async function signUp(
+  name: string,
+  email: string,
   password: string,
-  remember = false,
+  remember = true,
 ): Promise<{ ok: boolean; error?: string }> {
-  await new Promise((r) => setTimeout(r, 500)); // simulate auth round-trip
-  if (username.trim().toLowerCase() !== VALID_USERNAME || password !== VALID_PASSWORD) {
-    return { ok: false, error: "Invalid username or password." };
+  await delay(500); // simulate account provisioning
+  const cleanName = name.trim();
+  const cleanEmail = email.trim().toLowerCase();
+  if (cleanName.length < 2) return { ok: false, error: "Please enter your full name." };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+    return { ok: false, error: "Please enter a valid email address." };
   }
-  session = { user: DEMO_USER, remember, ts: Date.now() };
+  if (password.length < 6) {
+    return { ok: false, error: "Password must be at least 6 characters." };
+  }
+  const users = readUsers();
+  if (users.some((u) => u.email === cleanEmail)) {
+    return { ok: false, error: "An account with this email already exists. Sign in instead." };
+  }
+  users.push({ name: cleanName, email: cleanEmail, password, createdAt: Date.now() });
+  try {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  } catch {
+    /* noop */
+  }
+  session = {
+    user: { name: cleanName, role: "Customer", email: cleanEmail, initials: initialsOf(cleanName) },
+    remember,
+    ts: Date.now(),
+  };
   persist(session);
   emit();
   return { ok: true };
 }
 
-/** Clears the demo session. */
+/** Validates demo credentials or a stored account, then signs the user in. */
+export async function signIn(
+  username: string,
+  password: string,
+  remember = false,
+): Promise<{ ok: boolean; error?: string }> {
+  await delay(500); // simulate auth round-trip
+  const clean = username.trim().toLowerCase();
+
+  if (clean === VALID_USERNAME && password === VALID_PASSWORD) {
+    session = { user: DEMO_USER, remember, ts: Date.now() };
+    persist(session);
+    emit();
+    return { ok: true };
+  }
+
+  const match = readUsers().find(
+    (u) => u.email === clean && u.password === password,
+  );
+  if (match) {
+    session = {
+      user: {
+        name: match.name,
+        role: "Customer",
+        email: match.email,
+        initials: initialsOf(match.name),
+      },
+      remember,
+      ts: Date.now(),
+    };
+    persist(session);
+    emit();
+    return { ok: true };
+  }
+
+  return { ok: false, error: "Invalid username or password." };
+}
+
+/** Clears the current session. */
 export async function signOut(): Promise<void> {
   session = null;
   try {
@@ -109,6 +196,7 @@ export function useAuth() {
     isAuthenticated: current !== null,
     user: current?.user ?? null,
     signIn,
+    signUp,
     signOut,
   };
 }

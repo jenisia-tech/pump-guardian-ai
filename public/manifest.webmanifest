@@ -1,11 +1,11 @@
 {
-  "name": "freebuff.com application",
-  "short_name": "freebuff.com",
-  "description": "freebuff.com application",
+  "name": "CentriGuard — Centrifugal Pump Analytics",
+  "short_name": "CentriGuard",
+  "description": "Digital twin that analyzes simulated vibration and temperature data to predict centrifugal pump failures in HVAC systems.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "/logo.png",

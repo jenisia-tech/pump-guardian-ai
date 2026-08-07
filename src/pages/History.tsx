@@ -100,7 +100,7 @@ export default function History() {
 
   const exportReport = () => {
     const pdf = buildPdf(
-      "PumpGuardian AI — Historical Report",
+      "CentriGuard — Historical Report",
       `Asset CHW-02 · ${rangeLabel} window · Generated ${dateTimeStr(Date.now())}`,
       [
         {
@@ -125,11 +125,11 @@ export default function History() {
         },
       ],
     );
-    downloadPdf(`pumpguardian-history-${range}-${Date.now()}.pdf`, pdf);
+    downloadPdf(`centriguard-history-${range}-${Date.now()}.pdf`, pdf);
   };
 
   const exportCsv = () => {
-    downloadCsv(`pumpguardian-history-${range}-${Date.now()}.csv`, [
+    downloadCsv(`centriguard-history-${range}-${Date.now()}.csv`, [
       ["time", "bearing_temp_c", "bearing_health_pct", "vibration_g"],
       ...seed.temp.map((p, i) => [
         new Date(p.t).toISOString(),

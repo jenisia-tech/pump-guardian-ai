@@ -18,6 +18,7 @@ const LiveMonitoring = lazy(() => import("./pages/LiveMonitoring.tsx"));
 const DigitalTwin = lazy(() => import("./pages/DigitalTwin.tsx"));
 const Simulation = lazy(() => import("./pages/Simulation.tsx"));
 const Diagnostics = lazy(() => import("./pages/Diagnostics.tsx"));
+const Catalog = lazy(() => import("./pages/Catalog.tsx"));
 const Alerts = lazy(() => import("./pages/Alerts.tsx"));
 const Maintenance = lazy(() => import("./pages/Maintenance.tsx"));
 const History = lazy(() => import("./pages/History.tsx"));
@@ -41,7 +42,7 @@ function RouteLoading() {
         <span className="size-1.5 animate-bounce rounded-full bg-primary [animation-delay:240ms]" />
       </div>
       <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-        Initializing control room
+        Initializing CentriGuard
       </p>
     </div>
   );
@@ -76,10 +77,10 @@ function BootSplash() {
             className="text-center"
           >
             <p className="text-[15px] font-semibold tracking-tight text-foreground">
-              PumpGuardian <span className="text-primary">AI</span>
+              Centri<span className="text-primary">Guard</span>
             </p>
             <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-              Predictive Maintenance Platform
+              Centrifugal Pump Analytics
             </p>
           </motion.div>
           <div className="h-0.5 w-40 overflow-hidden rounded-full bg-border">
@@ -201,6 +202,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/digital-twin" element={<DigitalTwin />} />
                 <Route path="/simulation" element={<Simulation />} />
                 <Route path="/diagnostics" element={<Diagnostics />} />
+                <Route path="/catalog" element={<Catalog />} />
                 <Route path="/alerts" element={<Alerts />} />
                 <Route path="/maintenance" element={<Maintenance />} />
                 <Route path="/history" element={<History />} />

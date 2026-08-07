@@ -54,11 +54,11 @@ export default function Alerts() {
       ],
     }));
     const pdf = buildPdf(
-      "PumpGuardian AI — Alert Report",
+      "CentriGuard — Alert Report",
       `Asset CHW-02 · Generated ${dateTimeStr(Date.now())} · ${alerts.length} alerts`,
       sections.length ? sections : [{ heading: "NO ALERTS", lines: [{ text: "Alert log is empty." }] }],
     );
-    downloadPdf(`pumpguardian-alert-report-${Date.now()}.pdf`, pdf);
+    downloadPdf(`centriguard-alert-report-${Date.now()}.pdf`, pdf);
   };
 
   return (

@@ -15,6 +15,156 @@ export const ASSET = {
   standard: "ISO 10816-3 · Zone B",
 };
 
+/* ------------------------------------------------------------------ */
+/* Pump catalog (customer-facing)                                      */
+/* ------------------------------------------------------------------ */
+
+export interface CatalogItem {
+  id: string;
+  model: string;
+  name: string;
+  category: string;
+  hp: number;
+  kw: number;
+  rpm: number;
+  flow: number; // m³/h
+  head: number; // m
+  bearings: string;
+  monitoring: "Core" | "Pro";
+  price: string; // annual monitoring subscription
+  blurb: string;
+}
+
+export const CATALOG: CatalogItem[] = [
+  {
+    id: "cg-30chw",
+    model: "CG-30 CHW",
+    name: "Chilled Water Duty Pump",
+    category: "Chilled water",
+    hp: 30,
+    kw: 22,
+    rpm: 2950,
+    flow: 62,
+    head: 48,
+    bearings: "6311 DE/NDE",
+    monitoring: "Pro",
+    price: "₹1.3 L / yr",
+    blurb: "The reference unit for the live digital twin — end-suction pump with full Pro telemetry, FFT features and RUL projection.",
+  },
+  {
+    id: "cg-20chw",
+    model: "CG-20 CHW",
+    name: "Compact Chilled Water Pump",
+    category: "Chilled water",
+    hp: 20,
+    kw: 15,
+    rpm: 2900,
+    flow: 45,
+    head: 40,
+    bearings: "6208 DE/NDE",
+    monitoring: "Core",
+    price: "₹0.9 L / yr",
+    blurb: "Space-saving duty pump for secondary loops; Core telemetry covers vibration, temperature and BPFO trends.",
+  },
+  {
+    id: "cg-50chw",
+    model: "CG-50 CHW",
+    name: "High-Capacity Chilled Water Pump",
+    category: "Chilled water",
+    hp: 50,
+    kw: 37,
+    rpm: 2950,
+    flow: 110,
+    head: 55,
+    bearings: "6312 DE/NDE",
+    monitoring: "Pro",
+    price: "₹1.8 L / yr",
+    blurb: "Primary-loop workhorse with twin accelerometers and cavitation-band analysis for peak-load plants.",
+  },
+  {
+    id: "cg-75chw",
+    model: "CG-75 CHW",
+    name: "District Cooling Pump",
+    category: "Condenser water",
+    hp: 75,
+    kw: 55,
+    rpm: 2950,
+    flow: 160,
+    head: 62,
+    bearings: "6316 DE/NDE",
+    monitoring: "Pro",
+    price: "₹2.4 L / yr",
+    blurb: "High-flow condenser duty with extended spectral bandwidth for large cooling towers.",
+  },
+  {
+    id: "cg-15chw",
+    model: "CG-15 CHW",
+    name: "Light-Duty Chilled Water Pump",
+    category: "Chilled water",
+    hp: 15,
+    kw: 11,
+    rpm: 2900,
+    flow: 34,
+    head: 35,
+    bearings: "6207 DE/NDE",
+    monitoring: "Core",
+    price: "₹0.7 L / yr",
+    blurb: "Small-footprint unit for air-handling risers; Core package tracks the two highest-risk failure modes.",
+  },
+  {
+    id: "cg-40chw",
+    model: "CG-40 CHW",
+    name: "Midsize Chilled Water Pump",
+    category: "Condenser water",
+    hp: 40,
+    kw: 30,
+    rpm: 2950,
+    flow: 85,
+    head: 50,
+    bearings: "6311 DE/NDE",
+    monitoring: "Pro",
+    price: "₹1.5 L / yr",
+    blurb: "Balanced duty for plant rooms with mixed loads; Pro package adds efficiency tracking and ROI reporting.",
+  },
+  {
+    id: "cg-100chw",
+    model: "CG-100 CHW",
+    name: "Main Plant Loop Pump",
+    category: "Booster",
+    hp: 100,
+    kw: 75,
+    rpm: 2950,
+    flow: 220,
+    head: 70,
+    bearings: "6320 DE/NDE",
+    monitoring: "Pro",
+    price: "₹3.1 L / yr",
+    blurb: "Flagship unit for central plants; dual RTD and triaxial sensing with predictive work-order dispatch.",
+  },
+  {
+    id: "cg-05chw",
+    model: "CG-05 CHW",
+    name: "Small Booster Pump",
+    category: "Booster",
+    hp: 5,
+    kw: 3.7,
+    rpm: 2900,
+    flow: 12,
+    head: 24,
+    bearings: "6205 DE/NDE",
+    monitoring: "Core",
+    price: "₹0.4 L / yr",
+    blurb: "Entry-level unit for tenant boosters; Core telemetry keeps watch with minimal hardware.",
+  },
+];
+
+export const CATALOG_CATEGORIES = [
+  "All",
+  "Chilled water",
+  "Condenser water",
+  "Booster",
+];
+
 export const SENSORS = [
   { id: "ACC-01", type: "Accelerometer 1", mount: "Drive-end bearing housing", axis: "Radial", range: "±50 g", band: "10 Hz – 10 kHz", sample: "25.6 kS/s" },
   { id: "ACC-02", type: "Accelerometer 2", mount: "Pump casing (suction side)", axis: "Triaxial", range: "±50 g", band: "1 Hz – 20 kHz", sample: "51.2 kS/s" },
@@ -277,7 +427,7 @@ export const DOC_SECTIONS: DocSection[] = [
     title: "Project Overview",
     icon: "Info",
     body: [
-      "PumpGuardian AI is a predictive maintenance platform for centrifugal pumps in HVAC chilled water systems. It monitors a 30 HP (22 kW) pump at 2950 RPM using simulated industrial sensor data — no physical hardware is connected.",
+      "CentriGuard is a software digital twin that analyzes simulated vibration and temperature data to predict failures in the centrifugal pumps of HVAC chilled-water systems. It monitors a 30 HP (22 kW) pump at 2950 RPM — no physical hardware is connected.",
       "The platform demonstrates the complete condition-monitoring pipeline: sensor acquisition, signal conditioning, FFT/feature extraction, fault detection, remaining-useful-life prediction, alerting, and maintenance work-order recommendations.",
       "Fault signatures simulated: drive-end bearing wear (BPFO progression), cavitation (high-frequency vibration), combined failure, and emergency shutdown scenarios.",
     ],

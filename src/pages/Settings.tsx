@@ -44,7 +44,7 @@ export default function Settings() {
       (c) => (mode === "bearing" || mode === "healthy" ? c.id === "bearing" : mode === "cavitation" ? c.id === "cavitation" : true),
     );
     const pdf = buildPdf(
-      "PumpGuardian AI — Maintenance Report",
+      "CentriGuard — Maintenance Report",
       `Generated ${dateTimeStr(Date.now())} · Mode: ${mode}`,
       cards.map((c) => ({
         heading: c.title.toUpperCase(),
@@ -54,13 +54,13 @@ export default function Settings() {
         ],
       })),
     );
-    downloadPdf(`pumpguardian-maintenance-${Date.now()}.pdf`, pdf);
+    downloadPdf(`centriguard-maintenance-${Date.now()}.pdf`, pdf);
     toast.success("Maintenance report exported");
   };
 
   const exportHistory = () => {
     const pdf = buildPdf(
-      "PumpGuardian AI — Historical Report",
+      "CentriGuard — Historical Report",
       `Generated ${dateTimeStr(Date.now())}`,
       [
         {
@@ -77,13 +77,13 @@ export default function Settings() {
         },
       ],
     );
-    downloadPdf(`pumpguardian-history-${Date.now()}.pdf`, pdf);
+    downloadPdf(`centriguard-history-${Date.now()}.pdf`, pdf);
     toast.success("Historical report exported");
   };
 
   const exportAlerts = () => {
     const pdf = buildPdf(
-      "PumpGuardian AI — Alert Report",
+      "CentriGuard — Alert Report",
       `Generated ${dateTimeStr(Date.now())} · ${alerts.length} alerts`,
       alerts.slice(0, 60).map((a) => ({
         heading: a.title.toUpperCase(),
@@ -94,7 +94,7 @@ export default function Settings() {
         ],
       })),
     );
-    downloadPdf(`pumpguardian-alerts-${Date.now()}.pdf`, pdf);
+    downloadPdf(`centriguard-alerts-${Date.now()}.pdf`, pdf);
     toast.success("Alert report exported");
   };
 

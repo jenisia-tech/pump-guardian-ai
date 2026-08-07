@@ -12,6 +12,7 @@ import {
   Menu,
   Moon,
   Network,
+  Package,
   Search,
   Settings,
   SlidersHorizontal,
@@ -71,6 +72,10 @@ const NAV: NavSection[] = [
       { path: "/simulation", label: "Simulation", icon: SlidersHorizontal, key: "s" },
       { path: "/diagnostics", label: "AI Diagnostics", icon: BrainCircuit, key: "i" },
     ],
+  },
+  {
+    section: "Products",
+    items: [{ path: "/catalog", label: "Pump Catalog", icon: Package, key: "p" }],
   },
   {
     section: "Operations",
@@ -410,6 +415,7 @@ function ShortcutsDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
     ["t", "Digital Twin"],
     ["s", "Simulation"],
     ["i", "AI Diagnostics"],
+    ["p", "Pump Catalog"],
     ["a", "Alert Center"],
     ["m", "Maintenance"],
     ["h", "History"],
@@ -465,7 +471,7 @@ function TopBar({ onMenu, onShortcuts }: { onMenu: () => void; onShortcuts: () =
         <p className="truncate text-[15px] font-semibold tracking-tight text-foreground">
           {titleForPath(location.pathname)}
         </p>
-        <p className="hidden text-[11px] text-muted-foreground sm:block">PumpGuardian AI · Control Room</p>
+        <p className="hidden text-[11px] text-muted-foreground sm:block">CentriGuard · Control Room</p>
       </div>
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-2">

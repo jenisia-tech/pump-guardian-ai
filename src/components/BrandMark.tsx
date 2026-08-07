@@ -52,7 +52,7 @@ export function BrandMark({ className, size = 36 }: { className?: string; size?:
 export function Wordmark({
   className,
   size = 36,
-  sub = "Predictive Maintenance",
+  sub = "Centrifugal Pump Analytics",
 }: {
   className?: string;
   size?: number;
@@ -63,7 +63,7 @@ export function Wordmark({
       <BrandMark size={size} />
       <div className="leading-none">
         <p className="text-[15px] font-semibold tracking-tight text-foreground">
-          PumpGuardian <span className="text-primary">AI</span>
+          Centri<span className="text-primary">Guard</span>
         </p>
         {sub && (
           <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">

@@ -31,11 +31,11 @@ export default function Maintenance() {
       ],
     }));
     const pdf = buildPdf(
-      "PumpGuardian AI — Maintenance Report",
+      "CentriGuard — Maintenance Report",
       `Asset CHW-02 · Generated ${dateTimeStr(Date.now())} · Mode: ${s.mode}`,
       sections,
     );
-    downloadPdf(`pumpguardian-maintenance-report-${Date.now()}.pdf`, pdf);
+    downloadPdf(`centriguard-maintenance-report-${Date.now()}.pdf`, pdf);
   };
 
   return (

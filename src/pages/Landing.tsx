@@ -23,12 +23,12 @@ import { useHistory, useSimulation } from "@/lib/simulation";
 import { cn } from "@/lib/utils";
 
 const FEATURES = [
-  { icon: Activity, title: "Live telemetry", desc: "Vibration, temperature and performance streams refreshed every second from a realistic sensor model." },
+  { icon: Activity, title: "Vibration & temperature telemetry", desc: "Simulated accelerometer and RTD streams refreshed every second from a realistic sensor model." },
   { icon: BarChart3, title: "FFT feature extraction", desc: "BPFO, broadband RMS and spectral kurtosis computed on windowed 25.6 kS/s frames." },
-  { icon: Boxes, title: "Digital twin", desc: "Interactive component-level replica of the pump — click any part to inspect its live condition." },
-  { icon: BrainCircuit, title: "AI diagnostics", desc: "Ensemble ML models classify faults, quantify confidence, and project remaining useful life." },
-  { icon: BellRing, title: "Alert engine", desc: "Threshold logic raises actionable alarms with severity, root cause and recommended action." },
-  { icon: FileDown, title: "Report export", desc: "Maintenance, historical and alert reports export to PDF for the maintenance file." },
+  { icon: Boxes, title: "Interactive digital twin", desc: "Component-level replica of the pump — click any part to inspect its live condition." },
+  { icon: BrainCircuit, title: "AI diagnostics", desc: "Ensemble ML models classify bearing and cavitation faults, quantify confidence, and project remaining useful life." },
+  { icon: BellRing, title: "Alert engine", desc: "Threshold logic raises actionable alarms with severity, root cause and a recommended maintenance action." },
+  { icon: FileDown, title: "Pump catalog & fleet", desc: "Browse CentriGuard-ready pump models, add them to your fleet, and track every unit from one dashboard." },
 ];
 
 const STATS = [
@@ -77,7 +77,7 @@ export default function Landing() {
             className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary"
           >
             <ShieldCheck className="size-3.5" />
-            Simulated industrial telemetry · CHW-02
+            Digital twin · Simulated vibration & temperature
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
@@ -85,9 +85,9 @@ export default function Landing() {
             transition={{ delay: 0.08, duration: 0.55 }}
             className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl"
           >
-            Predict the failure.
+            Predict pump failure.
             <br />
-            <span className="text-primary">Before it happens.</span>
+            <span className="text-primary">Before it costs a shift.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 18 }}
@@ -95,10 +95,10 @@ export default function Landing() {
             transition={{ delay: 0.16, duration: 0.55 }}
             className="mt-5 max-w-lg text-[15px] leading-relaxed text-muted-foreground"
           >
-            PumpGuardian AI monitors motor bearing health and cavitation on a 30 HP
-            chilled-water pump using simulated sensor data — FFT features, remaining
-            useful life, and maintenance work-orders, all in a professional
-            control-room console.
+            CentriGuard is a software digital twin that analyzes simulated vibration
+            and temperature data to predict failures in the centrifugal pumps of HVAC
+            systems — bearing wear and cavitation flagged early, with remaining-useful-life
+            projections and maintenance work-orders.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -111,8 +111,13 @@ export default function Landing() {
                 Open control room <ArrowRight className="size-4" />
               </Button>
             </Link>
-            <Link to="/auth?returnTo=%2Fdocs">
+            <Link to="/auth?returnTo=%2Fcatalog">
               <Button variant="outline" size="lg" className="h-11 px-6">
+                Browse the catalog
+              </Button>
+            </Link>
+            <Link to="/auth?returnTo=%2Fdocs">
+              <Button variant="ghost" size="lg" className="h-11 px-6">
                 Read documentation
               </Button>
             </Link>
@@ -124,7 +129,7 @@ export default function Landing() {
             className="mt-8 flex items-center gap-2 text-[12px] text-muted-foreground"
           >
             <CheckCircle2 className="size-4 text-green-500" />
-            Demo access — no setup required · admin / admin123
+            Demo access — no setup required · admin / admin123 · or create an account
           </motion.div>
         </div>
 
@@ -140,7 +145,7 @@ export default function Landing() {
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <BrandMark size={22} />
-                <p className="text-[13px] font-semibold">PumpGuardian console</p>
+                <p className="text-[13px] font-semibold">CentriGuard console</p>
               </div>
               <span className="flex items-center gap-1.5 rounded-full border border-green-500/25 bg-green-500/10 px-2 py-0.5 text-[10.5px] font-semibold text-green-500">
                 <span className="size-1.5 animate-pulse rounded-full bg-green-500" />
@@ -216,7 +221,8 @@ export default function Landing() {
           <h2 className="mt-3 text-3xl font-bold tracking-tight">One console for the whole condition chain</h2>
           <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">
             From raw vibration to a dispatched work order — every layer of a real
-            predictive-maintenance deployment, demonstrated end to end.
+            predictive-maintenance deployment, demonstrated end to end, plus a catalog
+            of CentriGuard-ready pump models for your fleet.
           </p>
         </motion.div>
 
@@ -291,8 +297,8 @@ export default function Landing() {
           </h2>
           <p className="relative mx-auto mt-4 max-w-xl text-[14px] leading-relaxed text-muted-foreground">
             Inject bearing wear, cavitation, or a combined failure from the simulation
-            panel and watch the whole platform react — alerts, RUL, and maintenance
-            work-orders, just like a live deployment.
+            panel and watch the whole platform react — alerts, remaining useful life,
+            and maintenance work-orders, just like a live deployment.
           </p>
           <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link to="/auth">
@@ -300,9 +306,9 @@ export default function Landing() {
                 Launch the console <ArrowRight className="size-4" />
               </Button>
             </Link>
-            <Link to="/auth?returnTo=%2Farchitecture">
+            <Link to="/auth?returnTo=%2Fcatalog">
               <Button variant="outline" size="lg" className="h-11 px-7">
-                See system architecture
+                Browse pump catalog
               </Button>
             </Link>
           </div>
@@ -313,7 +319,7 @@ export default function Landing() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
           <Wordmark size={26} sub="" />
           <p className="text-[12px] text-muted-foreground">
-            © {new Date().getFullYear()} PumpGuardian AI · Software simulation — no physical sensors attached
+            © {new Date().getFullYear()} CentriGuard · Software simulation — no physical sensors attached
           </p>
         </div>
       </footer>

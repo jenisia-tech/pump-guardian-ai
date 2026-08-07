@@ -31,7 +31,7 @@ export default function LiveMonitoring() {
   };
 
   const exportCsv = () => {
-    downloadCsv(`pumpguardian-live-${Date.now()}.csv`, [
+    downloadCsv(`centriguard-live-${Date.now()}.csv`, [
       ["time", "bearing_vib_g", "hf_vib_g", "bearing_temp_c", "speed_rpm", "efficiency_pct", "bpfo_g", "overall_rms_g"],
       ...data.map((h) => [
         timeStr(h.t),
