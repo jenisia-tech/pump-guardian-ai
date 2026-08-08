@@ -5,6 +5,7 @@ import {
   FileText,
   Languages,
   Moon,
+  Presentation,
   RefreshCw,
   Sun,
   Timer,
@@ -97,6 +98,85 @@ export default function Settings() {
     );
     downloadPdf(`centriguard-alerts-${Date.now()}.pdf`, pdf);
     toast.success("Alert report exported");
+  };
+
+  const exportBriefing = () => {
+    const pdf = buildPdf(
+      "CentriGuard — Judge Briefing",
+      "AI-Powered Predictive Maintenance for Centrifugal Pumps in HVAC Chilled-Water Systems",
+      [
+        {
+          heading: "THE PROBLEM",
+          lines: [
+            {
+              text: "Unplanned pump failures in commercial HVAC plants cost Rs. 4-8 lakh per hour in downtime. Bearing wear and cavitation show clear vibration and temperature signatures days before failure - but without continuous analysis, those early warnings go unnoticed until the pump fails.",
+            },
+          ],
+        },
+        {
+          heading: "THE SOLUTION",
+          lines: [
+            {
+              text: "CentriGuard is a software digital twin of a 30 HP (22 kW) centrifugal pump running at 2950 RPM. It continuously analyzes simulated vibration and temperature data, detects bearing wear and cavitation early, projects remaining useful life, and converts findings into maintenance work orders - automatically.",
+            },
+          ],
+        },
+        {
+          heading: "HOW IT WORKS (PIPELINE)",
+          lines: [
+            {
+              text: "Simulated sensors (2x accelerometers + RTD) → FFT feature extraction (BPFO peak, broadband & high-frequency RMS) → rule-based inference engine → fault classification + remaining-useful-life projection → severity-graded alerts with recommended actions → automated GitHub issues (work-order automation).",
+            },
+          ],
+        },
+        {
+          heading: "KEY CAPABILITIES",
+          lines: [
+            { text: "• Live telemetry @ 1 Hz - five failure modes: healthy, bearing wear, cavitation, combined, emergency shutdown" },
+            { text: "• Interactive digital twin - click any component (motor, bearing, impeller) for its live health" },
+            { text: "• AI Diagnostics - detected fault, confidence score, root cause, prediction horizon, recommended action" },
+            { text: "• Alert center - severity-colored, threshold-driven, edge-triggered" },
+            { text: "• Cost analysis - monitoring Rs. 1.3 L/yr vs. failure Rs. 4-8 L/hr; ROI under 1 year" },
+            { text: "• Reports & automation - one-click PDF exports; file alerts straight to GitHub issues" },
+          ],
+        },
+        {
+          heading: "4-MINUTE DEMO",
+          lines: [
+            { text: "1. Sign in (admin / admin123) → live Dashboard with 8 KPI cards" },
+            { text: "2. Simulation → Bearing Failure → temperature 53→75 C, BPFO 0.03→0.17 g, health 98→55%" },
+            { text: "3. AI Diagnostics → fault classification, confidence, RUL, recommended action" },
+            { text: "4. Alerts → File as issue → creates a real GitHub issue with telemetry context" },
+          ],
+        },
+        {
+          heading: "BUSINESS VALUE",
+          lines: [
+            {
+              text: "One prevented unplanned failure pays for the entire deployment. Bearing replacement (~Rs. 16K) costs 25x less than the motor replacement (Rs. 4L) it prevents.",
+            },
+          ],
+        },
+        {
+          heading: "HONEST NOTE",
+          lines: [
+            {
+              text: "The sensor layer is simulated; the analysis, alerting, and integration pipeline is production-shaped. The inference engine is deterministic (rule-based) by design - the architecture is model-agnostic, ready to accept trained ML models.",
+            },
+          ],
+        },
+        {
+          heading: "TECH STACK",
+          lines: [
+            {
+              text: "React · TypeScript · Tailwind CSS · Framer Motion · Recharts · Convex server actions · GitHub REST API - a dark, minimal, industrial control-room UI.",
+            },
+          ],
+        },
+      ],
+    );
+    downloadPdf("centriguard-judge-briefing.pdf", pdf);
+    toast.success("Judge briefing exported");
   };
 
   return (
@@ -195,8 +275,8 @@ export default function Settings() {
           <h3 className="mb-1 flex items-center gap-2 text-[13.5px] font-semibold text-foreground">
             <FileText className="size-4 text-primary" /> Export reports
           </h3>
-          <p className="mb-4 text-[11.5px] text-muted-foreground">Download PDF snapshots for the maintenance file or shift handover.</p>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          <p className="mb-4 text-[11.5px] text-muted-foreground">Download PDF snapshots for the maintenance file, shift handover, or judging panel.</p>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <Button variant="outline" onClick={exportMaintenance} className="h-auto justify-start gap-2.5 py-3">
               <Download className="size-4 text-primary" />
               <span className="text-left">
@@ -216,6 +296,13 @@ export default function Settings() {
               <span className="text-left">
                 <span className="block text-[12.5px] font-medium">Alert report</span>
                 <span className="block text-[10.5px] font-normal text-muted-foreground">Full alert log PDF</span>
+              </span>
+            </Button>
+            <Button variant="outline" onClick={exportBriefing} className="h-auto justify-start gap-2.5 py-3">
+              <Presentation className="size-4 text-primary" />
+              <span className="text-left">
+                <span className="block text-[12.5px] font-medium">Judge briefing</span>
+                <span className="block text-[10.5px] font-normal text-muted-foreground">One-page handout PDF</span>
               </span>
             </Button>
           </div>
