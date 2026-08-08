@@ -1,4 +1,3 @@
-import { Dialog } from "@radix-ui/react-dialog";
 import { AlertTriangle, ChevronDown, ExternalLink } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -9,6 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,

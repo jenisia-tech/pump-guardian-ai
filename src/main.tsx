@@ -140,11 +140,9 @@ class ToolbarErrorBoundary extends React.Component<
   }
 }
 
-/** Mounts the Convex client when a deployment URL is configured. */
-const convex = convexUrl ? new ConvexReactClient(convexUrl) : null;
+const convex = new ConvexReactClient(convexUrl || "https://placeholder.convex.cloud");
 
 function AppProviders({ children }: { children: React.ReactNode }) {
-  if (!convex) return <>{children}</>;
   return <ConvexProvider client={convex}>{children}</ConvexProvider>;
 }
 
